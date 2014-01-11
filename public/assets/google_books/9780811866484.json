@@ -1,0 +1,74 @@
+{
+ "kind": "books#volumes",
+ "totalItems": 1,
+ "items": [
+  {
+   "kind": "books#volume",
+   "id": "x2L0h-jEr0AC",
+   "etag": "HqzinBd8CgQ",
+   "selfLink": "https://www.googleapis.com/books/v1/volumes/x2L0h-jEr0AC",
+   "volumeInfo": {
+    "title": "Chicken Scratches",
+    "subtitle": "Poultry Poetry and Rooster Rhymes",
+    "authors": [
+     "George Shannon",
+     "Lynn Brunelle"
+    ],
+    "publisher": "Chronicle Books",
+    "publishedDate": "2010-03-03",
+    "description": "As adorably absurd as chickens themselves, this book of charming illustrations and laugh-out-loud funny poultry poems will appeal to anyone with a fowl sense of humor!",
+    "industryIdentifiers": [
+     {
+      "type": "ISBN_10",
+      "identifier": "0811866483"
+     },
+     {
+      "type": "ISBN_13",
+      "identifier": "9780811866484"
+     }
+    ],
+    "pageCount": 32,
+    "printType": "BOOK",
+    "categories": [
+     "Juvenile Nonfiction"
+    ],
+    "averageRating": 4.0,
+    "ratingsCount": 8,
+    "contentVersion": "0.2.1.0.preview.3",
+    "imageLinks": {
+     "smallThumbnail": "http://bks0.books.google.com/books?id=x2L0h-jEr0AC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+     "thumbnail": "http://bks0.books.google.com/books?id=x2L0h-jEr0AC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    },
+    "language": "en",
+    "previewLink": "http://books.google.com/books?id=x2L0h-jEr0AC&printsec=frontcover&dq=isbn:9780811866484&hl=&cd=1&source=gbs_api",
+    "infoLink": "http://books.google.com/books?id=x2L0h-jEr0AC&dq=isbn:9780811866484&hl=&source=gbs_api",
+    "canonicalVolumeLink": "http://books.google.com/books/about/Chicken_Scratches.html?hl=&id=x2L0h-jEr0AC"
+   },
+   "saleInfo": {
+    "country": "US",
+    "saleability": "NOT_FOR_SALE",
+    "isEbook": false
+   },
+   "accessInfo": {
+    "country": "US",
+    "viewability": "PARTIAL",
+    "embeddable": true,
+    "publicDomain": false,
+    "textToSpeechPermission": "ALLOWED_FOR_ACCESSIBILITY",
+    "epub": {
+     "isAvailable": true,
+     "acsTokenLink": "http://books.google.com/books/download/Chicken_Scratches-sample-epub.acsm?id=x2L0h-jEr0AC&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+    },
+    "pdf": {
+     "isAvailable": false
+    },
+    "webReaderLink": "http://books.google.com/books/reader?id=x2L0h-jEr0AC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+    "accessViewStatus": "SAMPLE",
+    "quoteSharingAllowed": false
+   },
+   "searchInfo": {
+    "textSnippet": "As adorably absurd as chickens themselves, this book of charming illustrations and laugh-out-loud funny poultry poems will appeal to anyone with a fowl sense of humor!"
+   }
+  }
+ ]
+}

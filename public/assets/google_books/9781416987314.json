@@ -1,0 +1,71 @@
+{
+ "kind": "books#volumes",
+ "totalItems": 1,
+ "items": [
+  {
+   "kind": "books#volume",
+   "id": "gLW2lAEACAAJ",
+   "etag": "t6DWO6p3DKA",
+   "selfLink": "https://www.googleapis.com/books/v1/volumes/gLW2lAEACAAJ",
+   "volumeInfo": {
+    "title": "Belly Up",
+    "authors": [
+     "Stuart Gibbs"
+    ],
+    "publisher": "Simon & Schuster Books for Young Readers",
+    "publishedDate": "2010-05-18",
+    "description": "12 year old Theodore \"Teddy\" Roosevelt Fitzroy has got a murder on his hands and trouble on his tail. Henry, the hippopatamus at the brand-new nationally known FunJungle, has gone belly up. Even though it's claimed he died of natural causes, Teddy smells something fishy and it sure ain't the polar bear's lunch. Dealing with the zoo's top brass proves to be nothing but a waste of time. They want to see any trace of Henry's death disappear like yesterday's paper. So Teddy sets out to find the truth. With the help of Summer McCraken, a fiesty girl with secrets of her own, the two narrow down their prime suspects. Is it Martin Del Gato, FunJungle's head of operations who hates kids and hates animals even more? Or J.J McCraken, the owner of FunJungle and and hates animals even more? Or J.J McCraken, the owner of FunJungle and Summer's father, who has more concern for the dough he's raking in than the animals in the zoo? As their investigation goes on, Teddy gets squeezed on all sides to quit asking questions or Henry won't be the only animal in the zoo to turn up dead. The deeper Teddy and Summer get, they had better make sure they want to know what they want to know because when it comes to hippo homicide, the truth can't be kept in a cage!",
+    "industryIdentifiers": [
+     {
+      "type": "ISBN_10",
+      "identifier": "1416987312"
+     },
+     {
+      "type": "ISBN_13",
+      "identifier": "9781416987314"
+     }
+    ],
+    "pageCount": 304,
+    "printType": "BOOK",
+    "categories": [
+     "Juvenile Fiction"
+    ],
+    "averageRating": 3.5,
+    "ratingsCount": 252,
+    "contentVersion": "preview-1.0.0",
+    "imageLinks": {
+     "smallThumbnail": "http://bks3.books.google.com/books?id=gLW2lAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+     "thumbnail": "http://bks3.books.google.com/books?id=gLW2lAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+    },
+    "language": "en",
+    "previewLink": "http://books.google.com/books?id=gLW2lAEACAAJ&dq=isbn:9781416987314&hl=&cd=1&source=gbs_api",
+    "infoLink": "http://books.google.com/books?id=gLW2lAEACAAJ&dq=isbn:9781416987314&hl=&source=gbs_api",
+    "canonicalVolumeLink": "http://books.google.com/books/about/Belly_Up.html?hl=&id=gLW2lAEACAAJ"
+   },
+   "saleInfo": {
+    "country": "US",
+    "saleability": "NOT_FOR_SALE",
+    "isEbook": false
+   },
+   "accessInfo": {
+    "country": "US",
+    "viewability": "NO_PAGES",
+    "embeddable": false,
+    "publicDomain": false,
+    "textToSpeechPermission": "ALLOWED",
+    "epub": {
+     "isAvailable": false
+    },
+    "pdf": {
+     "isAvailable": false
+    },
+    "webReaderLink": "http://books.google.com/books/reader?id=gLW2lAEACAAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+    "accessViewStatus": "NONE",
+    "quoteSharingAllowed": false
+   },
+   "searchInfo": {
+    "textSnippet": "12 year old Theodore &quot;Teddy&quot; Roosevelt Fitzroy has got a murder on his hands and trouble on his tail. Henry, the hippopatamus at the brand-new nationally known FunJungle, has gone belly up."
+   }
+  }
+ ]
+}
