@@ -1,24 +1,35 @@
-﻿component accessors="true"  extends="model.user.User" {
+﻿component accessors="true" persistent="true" table="users" cachetype="transactional" output="false" extends="model.user.User" {
 	// ------------------------ PROPERTIES ------------------------ //	
-	property name="id";
-	property name="barcode";
-	property name="username";
-	property name="password";
-	property name="firstName";
-	property name="lastName";
-	property name="numBooksAllowed";
-	property name="role";
-/*
-	property name="id" column="id" fieldtype="id" setter="false" generator="native";
-	property name="barcode" column="barcode" fieldtype="column" ormtype="int";
-	property name="username" column="username" fieldtype="column" ormtype="string" length="21";
-	property name="password" column="password" fieldtype="column" ormtype="string" length="65";
-	property name="firstName" column="first_name" fieldtype="column" ormtype="string" length="10";
-	property name="lastName" column="last_name" fieldtype="column" ormtype="string" length="20";
-	property name="numBooksAllowed" column="num_books_allowed" fieldtype="column" ormtype="int";
-	property name="role" column="role" fieldtype="column" ormtype="int";
-*/
-
-	array function getCheckedOutBooks() {
+	property name="numBooksAllowed" column="num_books_allowed" ormtype="integer" length="11";
+	property name="books"	type="array" fieldtype="one-to-many" cfc="model.book.Book" singularname="book" linktable="checked_out" fkcolumn="user_id" inversejoincolumn="book_id" lazy="false" cascade="save-update";
+	
+	// ------------------------ PUBLIC METHODS ------------------------ //
+	/**
+	 * I return true if the user has book passed in
+	 */	
+	public numeric function numOfBooksCheckedOut() {
+		return ArrayLen( variables.books );
+		} 
+	 
+	public boolean function hasBook( required any theBook ) {
+		local.found = ArrayFind( variables.books, arguments.theBook );
+		
+		if ( local.found ) {
+			return true;
+			}
+		
+		return false;
+		}
+		
+	public void function checkInBook( required any theBook ) {
+		removeBook( arguments.theBook );
+		arguments.theBook.setCheckedOut( false );
+		arguments.theBook.setCheckedOutTimestamp( JavaCast( "null", "" ) );
+		}
+		
+	public void function checkOutBook( required any theBook ) {
+		addBook( arguments.theBook );
+		arguments.theBook.setCheckedOut( true );
+		arguments.theBook.setCheckedOutTimestamp( Now() );
 		}
 	}

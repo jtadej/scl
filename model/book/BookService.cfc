@@ -1,6 +1,7 @@
 ﻿component accessors="true" extends="model.abstract.BaseService" {
 	// ------------------------ DEPENDENCY INJECTION ------------------------ //
 	property name="BookGateway" getter="false";
+	property name="StudentGateway" getter="false";
 	property name="StudentService" getter="false";
 	property name="Validator" getter="false";
 	
@@ -15,9 +16,11 @@
 	/**
 	 * I return an array of checked out books
 	 */		
+/*
 	array function getCheckedOutBooks( numeric userID ) {
 		return variables.BookGateway.getCheckedOutBooks( arguments.userID );
 		}
+*/
 		
 	/**
 	 * I return an array of checked out books
@@ -36,13 +39,21 @@
 		local.Book = variables.BookGateway.findBook( local.Book );
 		
 		if ( local.Book.isPersisted() ) {
-			if ( isCheckedOut( local.Book.getId() ) ) {
+			if ( local.Book.isCheckedOut() ) {
 				// check if currentUser has book
-				if ( isCheckedOut( local.Book.getId(), local.currentUser.getId() ) ) {
+				if ( local.currentUser.hasBook( local.Book ) ) {
 					// if so, return it
-					checkIn( local.Book.getId(), local.currentUser.getId() );
-					local.message = "The book has been successfully checked in.";
-					local.result.setErrorMessage( local.message );
+					transaction {
+						local.currentUser.checkInBook( local.Book );
+						local.Book = variables.BookGateway.saveBook( local.Book );
+						local.currentUser = variables.StudentGateway.saveStudent( local.currentUser );
+						if ( local.currentUser.isPersisted() AND local.Book.isPersisted() ) {
+							local.result.setSuccessMessage( "The book has been successfully checked in." );
+							}
+						else {
+							local.result.setErrorMessage( "The book was unable to be checked in." );
+							}
+						}
 					}
 				else {
 					// if not, return message the book is already checked out
@@ -52,10 +63,18 @@
 				}
 			else {
 				// check out the book
-				if ( variables.StudentService.numCheckedOut( local.currentUser.getId() ) LT local.currentUser.getNumBooksAllowed() ) {
-					checkOut( local.Book.getId(), local.currentUser.getId() );
-					local.message = "The book has been successfully checked out.";
-					local.result.setErrorMessage( local.message );
+				if ( local.currentUser.numOfBooksCheckedOut() LT local.currentUser.getNumBooksAllowed() ) {
+					transaction {
+						local.currentUser.checkOutBook( local.Book );
+						local.Book = variables.BookGateway.saveBook( local.Book );
+						local.currentUser = variables.StudentGateway.saveStudent( local.currentUser );
+						if ( local.currentUser.isPersisted() AND local.Book.isPersisted() ) {
+							local.result.setSuccessMessage( "The book has been successfully checked out." );
+							}
+						else {
+							local.result.setErrorMessage( "The book was unable to be checked out." );
+							}
+						}
 					}
 				else {
 					local.message = "You have checked out your maximum allowed books.";
@@ -72,25 +91,16 @@
 		}
 		
 	/**
-	 * I return true if the book is checked out
-	 */		
-	boolean function isCheckedOut( required numeric bookId, numeric userId ) {
-		param name="arguments.userId" default="0";
-
-		return variables.BookGateway.isCheckedOut( arguments.bookId, arguments.userId );
-		}
-	
-	/**
 	 * I check out a book for a user
 	 */		
-	void function checkOut( required numeric bookId, required numeric userId ) {
-		return variables.BookGateway.checkOut( arguments.bookId, arguments.userId );
+	void function checkOut( required any theBook, required any currentUser ) {
+		return variables.BookGateway.checkOut( arguments.theBook, arguments.currentUser );
 		}
 		
 	/**
 	 * I check in a book for a user
 	 */		
-	void function checkIn( required numeric bookId, required numeric userId ) {
-		return variables.BookGateway.checkIn( arguments.bookId, arguments.userId );
+	void function checkIn( required any currentUser ) {
+		return variables.BookGateway.checkIn( arguments.currentUser );
 		}
 	}

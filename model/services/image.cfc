@@ -16,7 +16,7 @@
 		<cfset LOCAL.Context = LOCAL.Graphics.getFontRenderContext() />
 		<cfset LOCAL.Font = CreateObject( "java", "java.awt.Font") />
 		
-		<cfset LOCAL.fontName = "Arial-Black" />
+		<cfset LOCAL.fontName = "Arial" />
 		<cfset LOCAL.fontStyleName = "bold" />
 		<cfset LOCAL.fontStyle = LOCAL.Font.BOLD />
 		<cfset LOCAL.fontSize = ToString( Ceiling( sq_size / 2 ) ) />

@@ -3,15 +3,37 @@ component extends="lib.org.corfield.framework" {
 	THIS.Name = "scl";
 	THIS.Development = ( isLocalhost( CGI.REMOTE_HOST ) ) ? true : false ;
 	THIS.ApplicationRoot = getDirectoryFromPath( getCurrentTemplatePath() );
+	THIS.Datasource = ListLast( THIS.ApplicationRoot, "\/" );
 	THIS.ApplicationTimeout = CreateTimeSpan( 0, 0, 1, 0 );
 	THIS.SessionManagement = true;
 	THIS.SetClientCookies = false;
-	THIS.mappings[ "/scl/model" ] = THIS.ApplicationRoot & "model/";
+	THIS.modelMappingName = "/model";
 	THIS.mappings[ "/model" ] = THIS.ApplicationRoot & "model/";
 	THIS.mappings[ "/org" ] = THIS.ApplicationRoot & "lib/org/";
 	THIS.mappings[ "/Hoth" ] = THIS.ApplicationRoot & "lib/Hoth/";
 	THIS.mappings[ "/ValidateThis" ] = THIS.ApplicationRoot & "lib/ValidateThis/";
 	
+	// ------------------------ ORM SETTINGS ------------------------ //
+	this.ormenabled = true;
+	this.ormsettings = {
+			flushatrequestend = false
+		, automanagesession = false
+		, cfclocation = THIS.mappings[ "/model" ]
+		, dbCreate = "none"
+		, useDBForMapping = false
+		, logsql = THIS.development
+	};
+	
+	if( this.development ) {
+		if ( !isNull( url.rebuild ) ) {
+			this.ormsettings.dbcreate = "dropcreate";
+			this.ormsettings.sqlscript = "_install/setup.sql";
+			}	
+		if ( !isNull( url.refresh ) ) {
+			this.ormsettings.dbcreate = "update";
+			}	
+		}	
+		
 	// ------------------------ FW/1 SETTINGS ------------------------ //
 	VARIABLES.framework = {
 			reloadApplicationOnEveryRequest = THIS.Development
@@ -25,7 +47,7 @@ component extends="lib.org.corfield.framework" {
 		, base = getDirectoryFromPath( CGI.SCRIPT_NAME )
 		, baseURL = 'useCgiScriptName'
 		};
-	
+		
 	/*
 		This is provided for illustration only - you should not use this in
 		a real program! Only override the defaults you need to change!
@@ -90,11 +112,11 @@ component extends="lib.org.corfield.framework" {
 		APPLICATION.ExceptionTracker = new Hoth.HothTracker( new Hoth.config.HothConfig() );
 		
 		// setup bean factory
-		var beanfactory = new org.corfield.ioc( "/scl/model", { singletonPattern = "(Service|Gateway)$" } );
+		var beanfactory = new org.corfield.ioc( "/model", { singletonPattern = "(Service|Gateway)$" } );
 		setBeanFactory( beanfactory );
 		
 		// add validator bean to factory
-		var ValidateThisConfig = { definitionPath = '/scl/model', JSIncludes=false, resultPath="model.utility.ValidatorResult" };
+		var ValidateThisConfig = { definitionPath = '/model', JSIncludes=false, resultPath="model.utility.ValidatorResult" };
 		beanFactory.addBean( "Validator", new ValidateThis.ValidateThis( ValidateThisConfig ) );
 
 		// add configuration bean to factory
@@ -103,6 +125,11 @@ component extends="lib.org.corfield.framework" {
 
 	// ------------------------ CALLED WHEN PAGE REQUEST STARTS ------------------------ //	
 	void function setupRequest() {
+		if ( this.development && ( !isNull( url.rebuild ) || !isNull( url.refresh ) ) ) { 
+			resetDB();
+			ORMReload();
+			}
+				
 		// use setupRequest to do initialization per request
 		request.context.startTime = getTickCount();
 		
@@ -163,5 +190,43 @@ component extends="lib.org.corfield.framework" {
 			
 		return config;
 		}
-	
+		
+	private void function resetDB() {
+		var dbdata = new dbInfo( datasource = THIS.Datasource ).tables();
+		var arrDroppedTables = [];
+		
+		//WriteOutput( 'Starting cleaning up database...<br />');
+		for ( i = 1; i LTE dbdata.recordCount; i += 1 ) {
+			var tableToDrop = dbdata[ 'TABLE_NAME' ][ i ];
+			
+			arrDroppedTables = dropTable( tableToDrop, arrDroppedTables );
+			}
+		//WriteOutput( 'Done cleaning up database.<br /><br />');
+		WriteOutput( 'All DB tables removed.' );
+		}
+		
+	private array function dropTable( tableName, arrDroppedTables ) {
+		//WriteOutput( 'Starting Check for Table ' & ARGUMENTS.tableName & '...<br />');
+		
+		if ( NOT ArrayContains( ARGUMENTS.arrDroppedTables, ARGUMENTS.tableName ) ) {
+			LOCAL.queryService = new query( datasource = THIS.datasource );
+			LOCAL.fkdata = new dbInfo( datasource = THIS.Datasource, table = ARGUMENTS.tableName ).foreignkeys();
+			
+			if ( LOCAL.fkdata.recordcount ) {
+				for ( LOCAL.i = 1; LOCAL.i LTE LOCAL.fkdata.recordcount; LOCAL.i += 1 ) {
+					ARGUMENTS.arrDroppedTables = dropTable( LOCAL.fkdata[ 'FKTABLE_NAME' ][ LOCAL.i ], ARGUMENTS.arrDroppedTables );
+					}
+				}
+				
+			//WriteOutput( 'Dropping Table ' & ARGUMENTS.tableName & '...<br />');
+			ArrayAppend( ARGUMENTS.arrDroppedTables, ARGUMENTS.tableName );
+			LOCAL.queryService.setSql( "DROP TABLE " & ARGUMENTS.tableName );
+			//WriteOutput( LOCAL.queryService.getSQL() & '<br />');
+			LOCAL.queryService.execute();
+			//WriteOutput( 'Dropped Table ' & ARGUMENTS.tableName & '.<br />');
+			}
+			
+		//WriteOutput( 'Ending Check for Table ' & ARGUMENTS.tableName & '.<br />');
+		return ARGUMENTS.arrDroppedTables;
+		}	
 }

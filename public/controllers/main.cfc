@@ -17,7 +17,8 @@ component accessors="true" extends="abstract" {
 		
 		rc.intThumbnailSize = variables.config.display.thumbnail_size;
 		rc.objImageService = variables.imageService;
-		rc.arrCheckedOutBooks = variables.BookService.getCheckedOutBooks( Val( rc.currentUser.getId() ) );
+		
+		rc.arrCheckedOutBooks = rc.currentUser.getBooks();
 		rc.intAvailableBooks = rc.currentUser.getNumBooksAllowed() - ArrayLen( rc.arrCheckedOutBooks );
 		}
 	}

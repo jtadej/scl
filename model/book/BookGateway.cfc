@@ -20,15 +20,16 @@
 		return new( "Book" );
 		}
 		
+	/**
+	 * I save a book
+	 */	
+	Book function saveBook( required Book theBook ){
+		return save( arguments.theBook );
+		}
+		
 	Book function findBook( required Book theBook ) {
 		// find the book matching isbn10, isbn13, or upc
-		local.results = variables.DBService.get( variables.config.mysql.schema & '.books' , [ [ 'isbn10', '=', arguments.theBook.getISBN10() ]
-																																											 , [ 'isbn13', '=', arguments.theBook.getISBN13(), 'OR' ] 
-																																											 , [ 'upc', '=', arguments.theBook.getUPC(), 'OR' ] ] );
-		
-		if ( isNumeric( local.results.results().id ) ) { 
-			var Book = getBook( local.results.results().id );
-			}
+		local.Book = ORMExecuteQuery( "from Book where ( isbn10 = :isbn10 OR isbn13 = :isbn13 or upc = :upc )", { isbn10 = arguments.theBook.getISBN10(), isbn13 = arguments.theBook.getISBN13(), upc = arguments.theBook.getUPC() }, true, { maxResults = 1 } );		
 
 		if ( IsNull( local.Book ) ) local.Book = new( "Book" );
 		return local.Book;
@@ -57,11 +58,14 @@
 	/**
 	 * I check in a book for a user
 	 */		
-	void function checkIn( required numeric bookId, required numeric userId ) {
+	void function checkIn( required any currentUser ) {
+WriteDump( arguments );
+Abort;
 		variables.DBService.delete( variables.config.mysql.schema & '.checked_out', [ [ 'book_id', '=', arguments.bookId ], [ 'user_id', '=', arguments.userId, 'AND' ] ] );
 		}	
 	</cfscript>
 
+<!---
 	<cffunction name="getCheckedOutBooks" output="false" returntype="array" hint="I return a query of books that are checked out for a user">
 		<cfargument name="userID" type="numeric" required="false" />
 		
@@ -85,6 +89,7 @@
 									 )
 		</cfquery>
 		
-		<cfreturn myEntityLoad( "Book", qryCheckedOutBooks ) />
+		<cfreturn EntityLoad( "Book", qryCheckedOutBooks ) />
 	</cffunction>
+--->
 </cfcomponent>

@@ -1,28 +1,18 @@
-﻿component accessors="true" {
+﻿component accessors="true" persistent="true" table="users" cachetype="transactional" discriminatorColumn="user_type" output="false" {
 	// ------------------------ PROPERTIES ------------------------ //	
-	property name="id";
-	property name="barcode";
-	property name="username";
-	property name="password";
-	property name="firstName";
-	property name="lastName";
-	property name="numBooksAllowed";
-	property name="role";
+	property name="id" fieldtype="id" required="true" column="id" ormtype="integer" length="11" unique="true" generator="native" setter="false";
+	property name="barcode" column="barcode" ormtype="integer" length="11" unique="true";
+	property name="username" column="username" required="true" ormtype="string" length="21" unique="true" notnull="true";
+	property name="password" column="password" ormtype="string" length="65";
+	property name="firstName" column="first_name" ormtype="string" length="10";
+	property name="lastName" column="last_name" ormtype="string" length="20";
+	property name="role" fkcolumn="role" required="true" fieldtype="many-to-one" cfc="model.role.Role" notnull="true";
 	
 	// ------------------------ CONSTRUCTOR ------------------------ //
 	/**
 	 * I initialise this component
 	 */		
-	User function init( any collection ) {
-		setId( arguments.collection.id );
-		setBarcode( arguments.collection.barcode );
-		setUsername( arguments.collection.username );
-		setPassword( arguments.collection.password );
-		setFirstName( arguments.collection.first_name );
-		setLastName( arguments.collection.last_name );
-		setNumBooksAllowed( arguments.collection.num_books_allowed );
-		setRole( arguments.collection.role );
-		
+	User function init() {
 		return this;
 		}	
 
