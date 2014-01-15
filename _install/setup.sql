@@ -1939,6 +1939,6 @@ UPDATE books
 UPDATE books
 	 SET checked_out_timestamp = '2014-01-08 16:57:08'
 	 	 , checked_out = true
-	 WHERE id =2017;
+	 WHERE id = 2027;
 	 
 
