@@ -14,29 +14,45 @@
 		}
 		
 	/**
-	 * I return an array of checked out books
+	 * I return a book matching an id
 	 */		
-/*
-	array function getCheckedOutBooks( numeric userID ) {
-		return variables.BookGateway.getCheckedOutBooks( arguments.userID );
+	Book function getBook( required userid ){
+		return variables.BookGateway.getBook( Val( arguments.userid ) );
 		}
-*/
-		
+
+	/**
+	 * I return books matching passed in criteria
+	 */		
+	array function getBooks( string filterCriteria, boolean checkedOut ) {
+		param name="arguments.properties.filterCriteria" default="";
+
+		return variables.BookGateway.getBooks( filterCriteria, checkedOut );
+		}
+				
 	/**
 	 * I return an array of checked out books
 	 */		
 	struct function processBook( required struct properties ) {
-		param name="arguments.properties.isbn10" default="#arguments.properties.barcode#";
-		param name="arguments.properties.isbn13" default="#arguments.properties.barcode#";
-		param name="arguments.properties.upc" default="#arguments.properties.barcode#";
+		param name="arguments.properties.id" default="";
+		
+		local.defaultCode = ( StructKeyExists( arguments.properties, 'barcode' ) ) ? arguments.properties.barcode : '';
+		
+		param name="arguments.properties.isbn10" default="#local.defaultCode#";
+		param name="arguments.properties.isbn13" default="#local.defaultCode#";
+		param name="arguments.properties.upc" default="#local.defaultCode#";
 
 		local.result = variables.Validator.newResult();
 		local.currentUser = arguments.properties.currentUser;
 
-		local.Book = variables.BookGateway.newBook();
-		populate( local.Book, arguments.properties );
-		
-		local.Book = variables.BookGateway.findBook( local.Book );
+		if ( isNumeric( arguments.properties.id ) ) {
+			local.Book = getBook( arguments.properties.id );
+			}
+		else {
+			local.Book = variables.BookGateway.newBook();
+			populate( local.Book, arguments.properties );
+			
+			local.Book = variables.BookGateway.findBook( local.Book );
+			}
 		
 		if ( local.Book.isPersisted() ) {
 			if ( local.Book.isCheckedOut() ) {
@@ -88,19 +104,5 @@
 			local.result.setErrorMessage( local.message );
 			}
 		return local.result;
-		}
-		
-	/**
-	 * I check out a book for a user
-	 */		
-	void function checkOut( required any theBook, required any currentUser ) {
-		return variables.BookGateway.checkOut( arguments.theBook, arguments.currentUser );
-		}
-		
-	/**
-	 * I check in a book for a user
-	 */		
-	void function checkIn( required any currentUser ) {
-		return variables.BookGateway.checkIn( arguments.currentUser );
 		}
 	}

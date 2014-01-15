@@ -12,6 +12,32 @@
 	Book function getBook( required numeric userid ){
 		return get( "Book", arguments.userid );
 		}
+
+	/**
+	 * I return an array of Books matching criteria
+	 */		
+	array function getBooks( required string filterCriteria, boolean checkedOut ) {
+		// add functionality to search using author:'name' or title:'title' or isbn:'number'
+		local.hql = "from Book where ( ";
+		local.params = {};
+		
+		if ( filterCriteria NEQ '' ) {
+			local.hql &= "( author like :author or title like :title ) ";
+			structInsert( local.params, 'author', '%' & arguments.filterCriteria & '%' );
+			structInsert( local.params, 'title', '%' & arguments.filterCriteria & '%' );
+			}
+		if ( StructKeyExists( arguments, 'checkedOut' ) ) {
+			if ( StructCount( local.params ) ) {
+				local.hql &= "and ";
+				}
+			local.hql &= "checkedOut = :checkedOut ";
+			structInsert( local.params, 'checkedOut', arguments.checkedOut );
+			}
+		
+		local.hql &= " ) order by title, author";
+		
+		return ORMExecuteQuery( local.hql, local.params, { maxResults = 20 } );
+		}
 		
 	/**
 	 * I return a new book
@@ -27,6 +53,9 @@
 		return save( arguments.theBook );
 		}
 		
+	/**
+	 * I find a book matching passed in criteria
+	 */	
 	Book function findBook( required Book theBook ) {
 		// find the book matching isbn10, isbn13, or upc
 		local.Book = ORMExecuteQuery( "from Book where ( isbn10 = :isbn10 OR isbn13 = :isbn13 or upc = :upc )", { isbn10 = arguments.theBook.getISBN10(), isbn13 = arguments.theBook.getISBN13(), upc = arguments.theBook.getUPC() }, true, { maxResults = 1 } );		
@@ -54,42 +83,5 @@
 	void function checkOut( required numeric bookId, required numeric userId ) {
 		variables.DBService.insert( variables.config.mysql.schema & '.checked_out', { book_id = arguments.bookId, user_id = arguments.userId } );
 		}	
-		
-	/**
-	 * I check in a book for a user
-	 */		
-	void function checkIn( required any currentUser ) {
-WriteDump( arguments );
-Abort;
-		variables.DBService.delete( variables.config.mysql.schema & '.checked_out', [ [ 'book_id', '=', arguments.bookId ], [ 'user_id', '=', arguments.userId, 'AND' ] ] );
-		}	
 	</cfscript>
-
-<!---
-	<cffunction name="getCheckedOutBooks" output="false" returntype="array" hint="I return a query of books that are checked out for a user">
-		<cfargument name="userID" type="numeric" required="false" />
-		
-		<cfquery name="qryCheckedOutBooks" datasource="#variables.config.mysql.datasource#">
-			SELECT  id
-						, title
-						, author
-						, description
-						, isbn10
-						, isbn13
-						, upc
-						, cover_url
-						, cover_url_thumbnail
-						, page_count
-			FROM scl.books
-			WHERE id IN ( SELECT book_id
-										FROM scl.checked_out
-										<cfif StructKeyExists( arguments, "userID")>
-											WHERE user_id = <cfqueryparam value="#arguments.userID#" cfsqltype="cf_sql_integer" />
-										</cfif>
-									 )
-		</cfquery>
-		
-		<cfreturn EntityLoad( "Book", qryCheckedOutBooks ) />
-	</cffunction>
---->
 </cfcomponent>

@@ -37,7 +37,6 @@ component extends="lib.org.corfield.framework" {
 	// ------------------------ FW/1 SETTINGS ------------------------ //
 	VARIABLES.framework = {
 			reloadApplicationOnEveryRequest = THIS.Development
-		, trace = !THIS.Development
  		, generateSES = true
 		, maxNumContextsPreserved = 1
 		, usingSubsystems = true

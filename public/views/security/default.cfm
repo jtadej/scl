@@ -54,7 +54,7 @@
 				<div>
 					<label for="barcode">User ID</label>
 					<div>
-						<input type="text" id="barcode" name="barcode" placeholder="User ID" autofocus />
+						<input type="text" id="barcode" name="barcode" placeholder="User ID" pattern="[0-9]*" autofocus />
 						<p><a href="#buildURL( 'security?context=loginFull' )#">Login with username/password</a></p>
 					</div>
 				</div>

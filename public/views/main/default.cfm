@@ -26,30 +26,11 @@
 				<input type="submit" name="btnUpdate" id="btnUpdate" value="Update">
 			</div>
 	</form>
+
+	#view( 'main/bookbag' )#
 	
 	<div>
-		<fieldset>
-			<legend>Your bookbag ( #ArrayLen( rc.arrCheckedOutBooks )# )</legend>
-				<ul>
-					<cfloop from="1" to="#ArrayLen( rc.arrCheckedOutBooks )#" index="variables.i">
-						<cfset variables.book = rc.arrCheckedOutBooks[ variables.i ] /> 
-						<li style="display: inline-block; width: 100px; text-align: center; vertical-align: top;">
-							#( variables.book.getCoverThumbnailURL() EQ '') ? 
-												rc.objImageService.createDefaultImage( variables.i, rc.intThumbnailSize ) 
-											: rc.objImageService.resizeImage( variables.book.getCoverThumbnailURL(), rc.intThumbnailSize )#
-							<br />
-							<a><small>#variables.book.getTitle()#</small></a>
-						</li>
-					</cfloop>
-					<cfloop from="1" to="#rc.intAvailableBooks#" index="i">
-						<li style="display: inline-block; width: 100px; text-align: center; vertical-align: top;">#rc.objImageService.createDefaultImage( "?", rc.intThumbnailSize )#</li>
-					</cfloop>
-				</ul>
-		</fieldset>
-	</div>
-	
-	<div>
-		<a href="#buildURL( 'books.search' )#">Search for books</a>
+		<a href="#buildURL( 'book' )#">Search for books</a>
 	</div>
 	
 	#rc.Validator.getInitializationScript()#
