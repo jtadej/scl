@@ -9,7 +9,7 @@
 			<base href="#rc.basehref#">
 			
 			<!--- title set by a view - there is no default --->
-			<title>FW/1 Skeleton - <cfoutput>#rc.title#</cfoutput></title>
+			<title>Classroom Library - <cfoutput>#rc.title#</cfoutput></title>
 			
 <!---
 			<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
