@@ -1,71 +1,37 @@
 ﻿<cfset rc.title = "Login View" />	<!--- set a variable to be used in a layout --->
 
 <cfoutput>
-<!---
-	<div class="page-header hide"><h1>Login</h1></div>
-
-	<form id="frmLogin" action="#buildURL( 'security.login' )#" method="POST" class="form-horizontal">
-		<fieldset>
-			<legend>Login Form</legend>
-			
-			#view( "helpers/messages" )#
+	#view( 'helpers/messages' )#	
 	
-			<div class="control-group <cfif rc.result.hasErrors( 'barcode' )>error</cfif>">
-				<label class="control-label" for="barcode">User ID</label>
-				<div class="controls">
-					<input class="input-xlarge" type="text" id="barcode" name="barcode" placeholder="User ID" />
-					#view( "helpers/failures", { property="barcode" })#
-					<p class="help-block"><a href="#buildURL( 'security.loginPass' )#">Login with username/password</a></p>
-				</div>
+	<form id="frmLogin" class="form-signin" action="#buildURL( 'security/login' )#" role="form" method="POST">
+		<cfif rc.context EQ 'loginFull'>
+			<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-user"></span>
+				</span>
+				<label for="username" class="sr-only">Username</label>
+				<input type="text" id="username" name="username" class="form-control input-lg" placeholder="Username" autofocus />
 			</div>
 			
-			<div class="form-actions">
-				<input type="submit" name="login" id="login" value="Login" class="btn btn-primary">
-			</div>
-		</fieldset>
-	</form>
---->
-	<div><h1>Login</h1></div>
-	
-	<cfif StructKeyExists( rc, "result" ) and rc.result.hasMessage()>
-  	<div>#rc.result.getMessage()#</div>
-	</cfif>
-	
-	<form id="frmLogin" action="#buildURL( 'security/login' )#" method="POST">
-		<fieldset>
-			<legend>Login Form</legend>
+			<label for="password" class="sr-only">Password</label>
+			<input type="password" id="password" name="password" class="form-control input-lg" placeholder="Password" />
 			
-			<cfif rc.context EQ 'loginFull'>
-				<div>
-					<label for="username">Username</label>
-					<div>
-						<input type="text" id="username" name="username" placeholder="Username" autofocus />
-					</div>
-				</div>
-				
-				<div>
-					<label for="password">Password</label>
-					<div>
-						<input type="password" id="password" name="password" placeholder="Password" />
-						<p><a href="#buildURL( 'security' )#">Login with User ID</a></p>
-					</div>
-				</div>
-			<cfelse>
-				<div>
-					<label for="barcode">User ID</label>
-					<div>
-						<input type="text" id="barcode" name="barcode" placeholder="User ID" pattern="[0-9]*" autofocus />
-						<p><a href="#buildURL( 'security?context=loginFull' )#">Login with username/password</a></p>
-					</div>
-				</div>
-			</cfif>
-			
-			<div>
-				<input type="hidden" name="#rc.sessionName#" value="#rc.token#" />
-				<input type="hidden" name="context" value="#rc.context#" />
-				<input type="submit" name="login" id="login" value="Login">
+			<p class="help-block"><a href="#buildURL( 'security' )#">Login with User ID</a></p>
+		<cfelse>
+			<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-barcode"></span>
+				</span>
+				<label for="barcode" class="sr-only">User ID</label>
+				<input type="text" id="barcode" name="barcode" class="form-control input-lg <cfif rc.result.hasErrors( 'barcode' )>has_error</cfif>" placeholder="User ID" pattern="[0-9]*" autofocus />
 			</div>
-		</fieldset>
+			
+			<p class="help-block"><a href="#buildURL( 'security?context=loginFull' )#">Login with username/password</a></p>
+		</cfif>
+		
+		<input type="hidden" name="#rc.sessionName#" value="#rc.token#" />
+		<input type="hidden" name="context" value="#rc.context#" />
+		<input type="submit" id="login" name="login" class="btn btn-lg btn-block btn-default" value="Login" />
 	</form>
 	
 	#rc.Validator.getInitializationScript()#

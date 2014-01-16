@@ -80,7 +80,7 @@ component accessors="true" extends="model.abstract.BaseService" {
 		Student = variables.StudentGateway.getStudentByCredentials( Student );
 		if ( Student.isPersisted() ) {
 			setCurrentUser( Student );
-			result.setSuccessMessage( "Welcome #Student.getName()#. You have been logged in." );
+//			result.setSuccessMessage( "Welcome #Student.getName()#. You have been logged in." );
 			}
 		else {
 			var message = "Sorry, your login details have not been recognised.";

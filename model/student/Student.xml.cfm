@@ -4,6 +4,9 @@
 		<property name="barcode" desc="User ID">
 			<rule type="required" contexts="login" />
 			<rule type="integer" contexts="login" />
+			<rule type="maxLength">
+				<param name="maxLength" value="11" />
+			</rule>
 		</property>
 		<property name="username" desc="Username">
 			<rule type="required" contexts="loginFull" />

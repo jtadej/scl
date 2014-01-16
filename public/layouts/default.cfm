@@ -5,78 +5,83 @@
 	<html lang="en">
 		<head>
 			<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 			
 			<base href="#rc.basehref#">
 			
 			<!--- title set by a view - there is no default --->
 			<title>Classroom Library - <cfoutput>#rc.title#</cfoutput></title>
 			
-<!---
-			<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-			<link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-			<link href="assets/css/smoothness/jquery-ui-1.8.19.custom.css" rel="stylesheet">
-			<link href="assets/css/core.css?r=#rc.config.revision#" rel="stylesheet">
---->
-
-			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<!---
-			<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
---->
-			<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
-<!---
-			<script src="assets/js/jquery.field.min.js"></script>
-			<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-			<script src="assets/ckeditor/ckeditor.js"></script>
-			<script src="assets/js/core.js?r=#rc.config.revision#"></script>
---->
-		</head>
-		<body>
-<!---
-			<cfif rc.config.development>
-</cfoutput>				<span class="dev-mode label label-warning">Development Mode</span>
-			</cfif>			
+	    <!-- Bootstrap -->
+			<!-- Latest compiled and minified CSS -->
+			<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+			<!-- Optional theme -->
+			<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+			<link rel="stylesheet" href="public/assets/css/signin.css" />
+			<link rel="stylesheet" href="public/assets/css/sticky-footer-navbar.css" />
 			
-			<div id="container" class="container">
-				<div id="content" class="row" role="main">
-					<div class="span12">
-						<h2 class="pull-right"><cfif StructKeyExists( rc, "CurrentUser" )><small class="pull-right">#rc.CurrentUser.getName()#</small></cfif></h2>
-					
-					#body#
-					
-						<div class="clearfix append-bottom"></div>
+			<!-- JavaScript Libraries -->
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+			<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>		
+			
+	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	    <!--[if lt IE 9]>
+	      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+	    <![endif]-->
+		</head>
+		
+		<body>
+			
+			<div id="wrap">
+				<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+					<div class="container">
+	          <div class="navbar-header">
+							<a class="navbar-brand">Mr. Mulligan's Classroom Library</a>
+						</div>
+						<div class="navbar-collapse collapse">
+							<ul class="nav navbar-nav navbar-right">
+								<cfif StructKeyExists( rc, "CurrentUser" )>
+									<form class="navbar-form navbar-left" action="#buildURL( 'book/search' )#" role="search">
+									  <div class="form-group">
+											<label for="filterCriteria" class="sr-only">Enter search criteria for book</label>
+											<input type="text" id="filterCriteria" name="filterCriteria" class="form-control" placeholder="Find a book"  />
+											<input type="hidden" name="#rc.sessionName#" value="#rc.token#" />
+											<input type="hidden" name="context" value="bookSearch" />
+									  </div>
+									  <button type="submit" id="btnSearch" name="btnSearch" class="btn btn-default">Search</button>
+									</form>
+			            <li><a href="#buildURL( 'security/logout' )#">Logout</a></li>
+								</cfif>
+		          </ul>							
+		        </div>						
 					</div>
 				</div>
 				
-				<footer id="footer" class="row" role="contentinfo">
-					<div class="span12">
-						<p style="font-size: small;">
-							Powered by FW/1 version <cfoutput>#variables.framework.version#</cfoutput>.<br />
-							This request took <cfoutput>#getTickCount() - rc.startTime#</cfoutput>ms.
-						</p>
-					</div>
-				</footer>
-			</div>
---->
-			<div id="container">
-				<div id="content">
+				<div class="container">
 					<cfif StructKeyExists( rc, "CurrentUser" )>
-						<h2><small>Welcome, #rc.CurrentUser.getName()#!</small></h2>
-						<a href="#buildURL( 'security/logout' )#">Logout</a>
+						<div class="row spacer">
+							<div class="col-md-12">
+		        		<h3>Welcome, #rc.CurrentUser.getName()#!</h3>
+							</div>
+						</div>
 					</cfif>
-					
+
 					#body#
-					
 				</div>
-				
-				<footer id="footer">
-					<div>
-						<p style="font-size: small;">
-							Powered by FW/1 version <cfoutput>#variables.framework.version#</cfoutput>.<br />
-							This request took <cfoutput>#getTickCount() - rc.startTime#</cfoutput>ms.
-						</p>
-					</div>
-				</footer>
 			</div>
+
+			<div id="footer">
+				<div class="container">
+					<p class="text-muted">
+						Powered by FW/1 version <cfoutput>#variables.framework.version#</cfoutput>.<br />
+					</p>
+				</div>
+			</div>
+				
 		</body>
 	</html>
 </cfoutput>

@@ -7,6 +7,7 @@
 	property name="Validator" setter="true" getter="false";
 	
 	// ------------------------ PUBLIC METHODS ------------------------ //
+/*
 	void function default( required struct rc ) {
 		param name="rc.filterCriteria" default="";
 	
@@ -25,6 +26,7 @@
 		rc.arrCheckedOutBooks = rc.currentUser.getBooks();
 		rc.intAvailableBooks = rc.currentUser.getNumBooksAllowed() - ArrayLen( rc.arrCheckedOutBooks );
 		}
+*/
 		
 	void function search( required struct rc ) {
 		param name="rc.barcode" default="";
@@ -32,13 +34,13 @@
 
 		if ( variables.TokenService.check( rc.token ) ) {
 			rc.results = variables.BookService.getBooks( rc.filterCriteria, false );
-			variables.fw.redirect( "book", "results" );
+			variables.fw.redirect( "main", "results" );
 			}
 		else {
 			rc.result = variables.Validator.newResult();
 			var message = "Tokens do not match!";
 			rc.result.setErrorMessage( message );
-			variables.fw.redirect( "book", "result" );
+			variables.fw.redirect( "main", "result" );
 			}
 		}
 		
@@ -58,7 +60,7 @@
 			}
 		}
 		
-	void function checkOut( required struct rc ) {
+	void function processBook( required struct rc ) {
 		rc.result = variables.BookService.processBook( rc ); 
 		variables.fw.redirect( "main", "result" );
 		}
