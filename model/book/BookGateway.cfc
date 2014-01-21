@@ -36,7 +36,7 @@
 		
 		local.hql &= " ) order by title, author";
 		
-		return ORMExecuteQuery( local.hql, local.params, { maxResults = 20 } );
+		return ORMExecuteQuery( local.hql, local.params );
 		}
 		
 	/**

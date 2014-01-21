@@ -129,9 +129,6 @@ component extends="lib.org.corfield.framework" {
 			ORMReload();
 			}
 				
-		// use setupRequest to do initialization per request
-		request.context.startTime = getTickCount();
-		
 		// define base url
 		if( CGI.HTTPS EQ "on" )  {
 			rc.basehref = "https://";

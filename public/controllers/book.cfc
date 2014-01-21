@@ -34,7 +34,15 @@
 
 		if ( variables.TokenService.check( rc.token ) ) {
 			rc.results = variables.BookService.getBooks( rc.filterCriteria, false );
-			variables.fw.redirect( "main", "results" );
+			if ( ArrayLen( rc.results ) ) {
+				variables.fw.redirect( "main", "results" );
+				}
+			else {
+				rc.result = variables.Validator.newResult();
+				var message = "No books found for the following criteria: " & rc.filterCriteria & ".";
+				rc.result.setErrorMessage( message );
+				variables.fw.redirect( "main", "result" );
+				}
 			}
 		else {
 			rc.result = variables.Validator.newResult();
@@ -49,8 +57,13 @@
 		param name="rc.token" default="";
 		
 		if ( variables.TokenService.check( rc.token ) ) {
-			rc.result = variables.BookService.processBook( rc ); 
-			variables.fw.redirect( "main", "result" );
+			if ( rc.barcode EQ rc.CurrentUser.getBarcode() ) {
+				variables.fw.redirect( "security/logout" );
+				}
+			else {
+				rc.result = variables.BookService.processBook( rc ); 
+				variables.fw.redirect( "main", "result" );
+				}
 			}
 		else {
 			rc.result = variables.Validator.newResult();

@@ -3,7 +3,7 @@
 <cfoutput>
 
 	<cfif StructKeyExists( rc, "results" )>
-		<table class="table table-bordered table-hover table-condensed">
+		<table id="tblResults" name="tblResults" class="table table-bordered table-striped table-hover table-condensed">
 			<thead>
 				<tr>
 					<th>Title</th>
@@ -21,5 +21,23 @@
 			</tbody>
 		</table>
 	</cfif>
+	
+	<script language="JavaScript" src="public/assets/js/bootstrap_pagination.js"></script>
+	<script language="JavaScript">
+	$(document).ready(function(){
+	  $('##tblResults').dataTable( {
+				"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>"
+			, "sPaginationType": "bootstrap"
+			, "oLanguage": {
+					"sInfo": "_START_ to _END_ of _TOTAL_ books"
+				,	"sInfoFiltered": "(filtered from _MAX_)"
+				, "oPaginate": {
+						"sPrevious": "&larr;"
+					,	"sNext": "&rarr;"
+						}
+					}
+			}	);
+		});
+	</script>
 	
 </cfoutput>
