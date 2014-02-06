@@ -1,7 +1,7 @@
 ﻿component accessors="true" persistent="true" table="users" cachetype="transactional" output="false" extends="model.user.User" {
 	// ------------------------ PROPERTIES ------------------------ //	
 	property name="numBooksAllowed" column="num_books_allowed" ormtype="integer" length="11";
-	property name="books"	type="array" fieldtype="one-to-many" cfc="model.book.Book" singularname="book" linktable="checked_out" fkcolumn="user_id" inversejoincolumn="book_id" lazy="false" cascade="save-update";
+	property name="books"	type="array" fieldtype="one-to-many" cfc="model.book.Book" singularname="book" linktable="checked_out" fkcolumn="student_id" inversejoincolumn="book_id" lazy="false" cascade="save-update";
 	
 	// ------------------------ PUBLIC METHODS ------------------------ //
 	/**

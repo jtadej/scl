@@ -107,9 +107,6 @@ component extends="lib.org.corfield.framework" {
 	
 	// ------------------------ CALLED WHEN APPLICATION STARTS ------------------------ //	
 	void function setupApplication() {
-		// add exception tracker to application scope
-		APPLICATION.ExceptionTracker = new Hoth.HothTracker( new Hoth.config.HothConfig() );
-		
 		// setup bean factory
 		var beanfactory = new org.corfield.ioc( "/model", { singletonPattern = "(Service|Gateway)$" } );
 		setBeanFactory( beanfactory );

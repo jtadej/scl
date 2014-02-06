@@ -2,7 +2,7 @@ component accessors="true" extends="model.abstract.BaseService" {
 	
 	// ------------------------ DEPENDENCY INJECTION ------------------------ //	
 	property name="config" getter="false";
-	property name="StudentGateway" getter="false";
+	property name="UserGateway" getter="false";
 
 	variables.userkey = "userid";
 
@@ -33,7 +33,7 @@ component accessors="true" extends="model.abstract.BaseService" {
 		if ( hasCurrentUser() ) {
 			var map = getCurrentStorage();
 			var userkey = map[ variables.userkey ];
-			return variables.StudentGateway.getStudent( userkey );
+			return variables.UserGateway.getUser( userkey );
 			}
 		}
 
@@ -72,21 +72,32 @@ component accessors="true" extends="model.abstract.BaseService" {
 		param name="arguments.properties.username" default="";
 		param name="arguments.properties.password" default="";
 		
-		var Student = variables.StudentGateway.newStudent();
-		populate( Student, arguments.properties );
-		
-		var result = variables.Validator.validate( theObject=Student, context=arguments.properties.context );
+		var isAdmin = ( Find( "admin:", arguments.properties.action ) ) ? true : false;
 
-		Student = variables.StudentGateway.getStudentByCredentials( Student );
-		if ( Student.isPersisted() ) {
-			setCurrentUser( Student );
-//			result.setSuccessMessage( "Welcome #Student.getName()#. You have been logged in." );
-			}
-		else {
-			var message = "Sorry, your login details have not been recognised.";
-			result.setErrorMessage( message );
-			var failure = { propertyName="barcode", clientFieldname="barcode", message=message };
-			result.addFailure( failure );
+		var User = variables.UserGateway.newUser();
+		populate( User, arguments.properties );
+		
+		var result = variables.Validator.validate( theObject=User, context=arguments.properties.context );
+
+		if ( result.getIsSuccess() ) {
+			User = variables.UserGateway.getUserByCredentials( User );
+			
+			var isAllowed = ( ( isAdmin AND ( User.isAdmin() OR User.isTeacher() ) ) 
+										 OR ( NOT isAdmin AND User.isStudent() ) ) ? true : false;
+
+			if ( User.isPersisted() ) {
+				if ( isAllowed ) {
+					setCurrentUser( User );
+					}
+				else {
+					var message = "Sorry, you do not have permission to log into this application.";
+					result.setErrorMessage( message );
+					}
+				}
+			else {
+				var message = "Sorry, your login details have not been recognised.";
+				result.setErrorMessage( message );
+				}
 			}
 		return result;
 		}	
@@ -94,7 +105,7 @@ component accessors="true" extends="model.abstract.BaseService" {
 	/**
 	 * I add a user to the session
 	 */		
-	void function setCurrentUser( required any Student ){
-		getCurrentStorage()[ variables.userkey ] = arguments.Student.getID();
+	void function setCurrentUser( required any theUser ){
+		getCurrentStorage()[ variables.userkey ] = arguments.theUser.getID();
 		}
 	}

@@ -1,7 +1,6 @@
 component accessors="true"{
 
 	// ------------------------ DEPENDENCY INJECTION ------------------------ //	
-	property name="formatterService" setter="true" getter="false";
 	property name="SecurityService" setter="true" getter="false";
 
 	
@@ -10,6 +9,8 @@ component accessors="true"{
 		}
 	
 	void function before( required struct rc ) {
+		param name="rc.title" default="";
+		
 		rc.isallowed = variables.SecurityService.isAllowed( variables.fw.getFullyQualifiedAction() );
 		if ( !rc.isallowed ) {
 			variables.fw.redirect( "security" );
@@ -17,12 +18,5 @@ component accessors="true"{
 		else {
 			rc.CurrentUser = variables.SecurityService.getCurrentUser();
 			}
-		}
-
-	void function default( required struct rc ) {
-		param name="rc.title" default="";
-		rc.when = now(); // set when for service argument
-		// queue up a specific service (formatter.longdate) with named result (today)
-		rc.today = variables.FormatterService.longdate( rc.when );
 		}
 	}

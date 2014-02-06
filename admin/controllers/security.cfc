@@ -4,6 +4,7 @@ component accessors="true" {
 	property name="SecurityService" setter="true" getter="false";
 	property name="UserService" setter="true" getter="false";
 	property name="TokenService" setter="true" getter="false";
+	property name="Validator" setter="true" getter="false";
 	
 	// ------------------------ PUBLIC METHODS ------------------------ //
 	void function init( required any fw ) {
@@ -11,6 +12,8 @@ component accessors="true" {
 		}
 	
 	void function default( required struct rc ) {
+		param name="rc.context" default="loginFull";
+		
 		rc.loggedin = variables.SecurityService.hasCurrentUser();
 		if ( rc.loggedin ) {
 			variables.fw.redirect( "main" );
@@ -27,10 +30,22 @@ component accessors="true" {
 	void function login( required struct rc ){
 		param name="rc.barcode" default="";
 		param name="rc.token" default="";
+		
 		if ( variables.TokenService.check( rc.token ) ) {
 			rc.result = variables.SecurityService.loginUser( rc );
-			if( rc.result.getIsSuccess() ) variables.fw.redirect( "main", "result" );
-			else variables.fw.redirect( "security", "result" );
+			if ( rc.result.getIsSuccess() ) {
+				rc.currentUser = variables.SecurityService.getCurrentUser();
+				variables.fw.redirect( "main", "result" );
+				}
+			else {
+				variables.fw.redirect( "security", "result" );
+				}
+			}
+		else {
+			rc.result = variables.Validator.newResult();
+			var message = "Tokens do not match!";
+			rc.result.setErrorMessage( message );
+			variables.fw.redirect( "security", "result" );
 			}
 		}
 		

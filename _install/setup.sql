@@ -1909,16 +1909,43 @@ INSERT INTO users (password,num_books_allowed,role,user_type,id,barcode,username
 								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',5,1,'Student',18,50078470,'as','A','S')
 								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',5,1,'Student',19,50054574,'jt','J','T')
 								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',5,1,'Student',20,50050536,'hv','H','V')
-								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',5,1,'Student',21,50058623,'ez','E','Z');
+								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',5,1,'Student',21,50058623,'ez','E','Z')
+								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',NULL,3,'Administrator',22,NULL,'jdt','J','T')
+								, ('5119ED792CCFC42DA3F9A5DCF55210E6CD453C7A81FFB52681F62D72022FBE46',NULL,2,'Teacher',23,NULL,'sm','S','M');
 								
 								
-INSERT INTO checked_out (user_id,book_id)
+INSERT INTO checked_out (student_id,book_id)
 								 VALUES ('2','1007')
 											, ('2','1560')
 											, ('2','1996')
 											, ('2','2018')
 											, ('2','2027');
 
+INSERT INTO teachers_students (teacher_id,student_id)
+											 VALUES ('23','1')
+														, ('23','2')
+														, ('23','3')
+														, ('23','4')
+														, ('23','5')
+														, ('23','6')
+														, ('23','7')
+														, ('23','8')
+														, ('23','9')
+														, ('23','10')
+														, ('23','11')
+														, ('23','12')
+														, ('23','13')
+														, ('23','14')
+														, ('23','15')
+														, ('23','16')
+														, ('23','17')
+														, ('23','18')
+														, ('23','19')
+														, ('23','20')
+														, ('23','21');
+
+INSERT INTO admins_teachers (admin_id,teacher_id)
+											 VALUES ('22','21')
 
 UPDATE books
 	 SET checked_out_timestamp = '2014-01-08 13:04:33'

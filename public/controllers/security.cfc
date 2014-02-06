@@ -2,7 +2,7 @@
 	// ------------------------ DEPENDENCY INJECTION ------------------------ //	
 	property name="config" setter="true" getter="false";
 	property name="SecurityService" setter="true" getter="false";
-	property name="StudentService" setter="true" getter="false";
+	property name="UserService" setter="true" getter="false";
 	property name="TokenService" setter="true" getter="false";
 	property name="Validator" setter="true" getter="false";
 	
@@ -19,8 +19,8 @@
 			variables.fw.redirect( "main" );
 			}
 		else {
-			rc.Student = variables.StudentService.newStudent();
-			rc.Validator = variables.StudentService.getValidator( rc.Student );
+			rc.User = variables.UserService.newUser();
+			rc.Validator = variables.UserService.getValidator( rc.User );
 			if( !StructKeyExists( rc, "result" ) ) rc.result = rc.Validator.newResult();
 			rc.sessionName = variables.config.session.token_name;
 			rc.token = variables.TokenService.generate();

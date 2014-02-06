@@ -26,7 +26,8 @@
 	<script language="JavaScript">
 	$(document).ready(function(){
 	  $('##tblResults').dataTable( {
-				"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>"
+				"iDisplayLength": 5
+			,	"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>"
 			, "sPaginationType": "bootstrap"
 			, "oLanguage": {
 					"sInfo": "_START_ to _END_ of _TOTAL_ books"

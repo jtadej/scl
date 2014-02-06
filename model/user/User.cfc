@@ -25,6 +25,27 @@
 		return !IsNull( variables.id );
 		}
 		
+	/**
+	 * I return true if the user has no permissions
+	 */	
+	boolean function isStudent() {
+		return isNull( variables.role.getPermissions() );
+		}
+		
+	/**
+	 * I return true if the user has the teacher permission
+	 */	
+	boolean function isTeacher() {
+		return ( isNull( variables.role.getPermissions() ) ) ? false : structKeyExists( deserializeJSON( variables.role.getPermissions() ), "teacher" );
+		}
+		
+	/**
+	 * I return true if the user has the admin permission
+	 */	
+	boolean function isAdmin() {
+		return ( isNull( variables.role.getPermissions() ) ) ? false : structKeyExists( deserializeJSON( variables.role.getPermissions() ), "admin" );
+		}
+		
 	string function getName() {
 		return variables.firstName & ' ' & variables.lastName;
 		}
